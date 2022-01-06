@@ -1,78 +1,63 @@
-# AMM machine
-
-import matplotlib as mpl
-
-mpl.use('Agg')
+# Simple RSA algorythm
+#import fractions  #gcd
+import math
 import numpy as np
-import matplotlib.pyplot as plt
+ 
 
-# defining pool
-x = 0.0
-y = 0.0
-t = 0
-period = []
-price = []
-volume = []
-xq = float(input("Enter initial token X quantity in a pool: "))
-xp = float(input("Enter initial token X price in $: "))
-yp = float(input("Enter initial token Y price in $: "))
-yq = xq * xp / yp
-p = xq * xp  # half-pool price
-s = xq + yq
-k = xq * yq
-print("Initial token Y quantity in a pool:", yq)
-print("X token share in a pool:", xq / s)
-print("Y token share in a pool:", yq / s)
-print("Price ratio:", xp / yp)
-print("s =", s)
-print("k =", k)
-print("")
-period.append(t)
-price.append(xp / yp)
-#volume.append(0)
-plt.plot(period, price, volume)
-plt.savefig('graph.png')
+p1 = int(input("Choose prime number 1: ")) 
+p2 = int(input("Choose prime number 2: "))
+print()
 
+#k = 2 # just defined by me
+p = p1
+q = p2
+n = p*q
+fi = (p-1)*(q-1)
+
+# e has some requirements
 i = 0
-while i == 0:
+while i < 1:
+  print("Choose e between 1 and", fi,"AND coprime to", fi)
+  e = int(input("Enter e:"))
+  print()
+  if math.gcd(e,fi) != 1 or e > fi:
+    print("Wrong e")
+  else:
+    i += 1
 
-    exc_token = input("Select token you want to exchange (X or Y): ")
+# it's hard to understand how to calculate this fookin "d"
+#d = ((k * fi) + 1) / e
+#d = e**(fi-2) % fi
+d = pow(e, -1, fi)
+#d = 11
 
-    if exc_token.lower() == 'x':
-        q = float(input("Enter number of tokens you want to exchange: "))
-        xq = xq + q
-        y = k / xq
-        yqr = yq - y
-        yq = y
-        print("Y received:", yqr)
-    elif exc_token.lower() == 'y':
-        q = float(input("Enter number of tokens you want to exchange: "))
-        yq = yq + q
-        x = k / yq
-        xqr = xq - x
-        xq = x
-        print("X received:", xqr)
-    else:
-        print("Invalid token")
+print("Your public key is:", n, e)
+print("Your private key is:", d)
+print()
 
-    xp = p / xq
-    yp = p / yq
-    s = xq + yq
-    k = xq * yq
-    print("X quantity in a pool =", xq)
-    print("Y quantity in a pool =", yq)
-    print("X price:", xp)
-    print("Y price:", yp)
-    print("X token share in a pool:", xq / s)
-    print("Y token share in a pool:", yq / s)
-    print("Price ratio:", xp / yp)
-    print("s =", s)
-    print("k =", k)
-    print("")
+def encrypt(me):
+    c = me**e % n
+    #print(e, en, n)
+    print("Encrypted Message is: ", c)
+    return c
 
-    t += 1
-    period.append(t)
-    price.append(xp / yp)
-    #volume.append(q*xp)
-    plt.plot(period, price)
-    plt.savefig('graph.png')
+def decrypt(me):
+    c = me**d % n
+    #print(d, en, n)
+    print("Decrypted Message is: ", c)
+    return c
+
+while 1:
+  a1 = input("Do you want to encrypt or decrypt a message? (e/d): ")
+  if a1.lower() == 'e':
+    message = int(input("Enter the message to be encrypted: ")) 
+    # print("Original Message is: ", message)
+    c = encrypt(message)
+    print()
+  elif a1.lower() == 'd':
+    message = int(input("Enter the message to be decrypted: ")) 
+    # print("Original Message is: ", message)
+    c = decrypt(message)
+    print()
+  else:
+    print("Unknown command")
