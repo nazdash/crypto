@@ -1,4 +1,4 @@
 import os
 import sys
 
-import simple_rsa
+import simple_amm

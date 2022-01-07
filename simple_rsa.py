@@ -31,8 +31,8 @@ while i < 1:
 d = pow(e, -1, fi)
 #d = 11
 
-print("Your public key is:", n, e)
-print("Your private key is:", d)
+print("Your public key is:", e, n)
+print("Your private key is:", d, n)
 print()
 
 def encrypt(me):
